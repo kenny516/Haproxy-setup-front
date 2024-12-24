@@ -58,6 +58,21 @@
               </svg>
               Configuration
             </router-link>
+            <router-link
+              to="/list-server"
+              class="flex items-center px-4 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out rounded-md hover:bg-white hover:bg-opacity-10"
+              active-class="bg-white bg-opacity-10"
+            >
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 10h11M9 21V3m7 7h3m-3 0V3m0 0h3m-3 7h3"
+                />
+              </svg>
+              List Server
+            </router-link>
           </div>
         </div>
 
@@ -148,6 +163,21 @@
               />
             </svg>
             Configuration
+          </router-link>
+          <router-link
+            to="/list-server"
+            class="block px-3 py-2 text-base font-medium text-white transition-all duration-300 ease-in-out rounded-md hover:bg-white hover:bg-opacity-10"
+            active-class="bg-white bg-opacity-10"
+          >
+            <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 10h11M9 21V3m-6 7h18m-9 4v7"
+              />
+            </svg>
+            List Server
           </router-link>
         </div>
       </div>
