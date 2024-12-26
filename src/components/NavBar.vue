@@ -38,7 +38,7 @@
               Add Server
             </router-link>
             <router-link
-              to="/config"
+              to="/configuration"
               class="flex items-center px-4 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out rounded-md hover:bg-white hover:bg-opacity-10"
               active-class="bg-white bg-opacity-10"
             >
@@ -144,7 +144,7 @@
             Add Server
           </router-link>
           <router-link
-            to="/config"
+            to="/configuration"
             class="block px-3 py-2 text-base font-medium text-white transition-all duration-300 ease-in-out rounded-md hover:bg-white hover:bg-opacity-10"
             active-class="bg-white bg-opacity-10"
           >
