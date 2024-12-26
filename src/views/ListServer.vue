@@ -47,7 +47,7 @@
                   ></div>
                   <div>
                     <h3 class="font-medium text-gray-900">{{ server.name }}</h3>
-                    <p class="text-sm text-gray-500">{{ server.ip }}</p>
+                    <p class="text-sm text-gray-500">{{ server.address }}</p>
                   </div>
                 </div>
                 <div class="flex items-center space-x-3">
@@ -121,7 +121,7 @@
                   ></div>
                   <div>
                     <h3 class="font-medium text-gray-900">{{ server.name }}</h3>
-                    <p class="text-sm text-gray-500">{{ server.ip }}</p>
+                    <p class="text-sm text-gray-500">{{ server.address }}</p>
                   </div>
                 </div>
                 <div class="flex items-center space-x-3">
@@ -145,17 +145,17 @@ const apiUrl = import.meta.env.VITE_API_URL
 export default {
   data() {
     return {
-      applicationServers: [{ name: 'Server A', ip: '192.168.0.1', port: 8080 }],
-      databaseServers: [{ name: 'Server A', ip: '192.168.0.1', port: 8080 }],
+      applicationServers: [],
+      databaseServers: [],
     }
   },
   methods: {
     async fetchServers() {
       try {
-        const response = await axios.get(`${apiUrl}/servers`)
+        const response = await axios.get(`${apiUrl}/haproxy/list_servers`)
         const servers = response.data
-        this.applicationServers = servers.filter((server) => server.type === 'application')
-        this.databaseServers = servers.filter((server) => server.type === 'database')
+        this.applicationServers = servers.backends
+        this.databaseServers = servers.db_servers
       } catch (error) {
         console.error('Error fetching servers:', error)
       }

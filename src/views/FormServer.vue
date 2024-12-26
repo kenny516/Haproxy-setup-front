@@ -75,7 +75,7 @@
             <input
               id="server-ip"
               type="text"
-              v-model="newServer.ip"
+              v-model="newServer.address"
               class="w-full p-3 transition-all duration-200 border-2 border-indigo-200 rounded-lg bg-indigo-50 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               placeholder="Enter IP address"
               required
@@ -133,7 +133,7 @@ import Toast from '../components/Toast.vue'
 
 const newServer = ref({
   name: '',
-  ip: '',
+  address: '',
   port: '',
   type: '',
 })
@@ -143,12 +143,24 @@ const showErrorToast = ref(false)
 
 const addServer = async () => {
   try {
-    const JsonServerConfig = JSON.stringify(newServer.value)
-    const response = await axios.post(apiUrl + '/add-server', {
-      JsonServerConfig,
-    })
-    console.log('Server added:', response.data)
-    newServer.value = { name: '', ip: '', port: '', type: '' }
+    const JsonServerConfig = newServer.value
+    console.log('Adding server:', JsonServerConfig)
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+    if (newServer.value.type === 'database') {
+      const response = await axios.post(apiUrl + '/haproxy/add_db_server', JsonServerConfig, {
+        headers,
+      })
+      console.log('Server added:', response.data)
+    } else if (newServer.value.type === 'application') {
+      const response = await axios.post(apiUrl + '/haproxy/add_app_server', JsonServerConfig, {
+        headers,
+      })
+      console.log('Server added:', response.data)
+    }
+
+    newServer.value = { name: '', address: '', port: '', type: '' }
     showSuccessToast.value = true
     setTimeout(() => {
       showSuccessToast.value = false
