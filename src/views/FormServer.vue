@@ -143,18 +143,23 @@ const showErrorToast = ref(false)
 
 const addServer = async () => {
   try {
-    const JsonServerConfig = JSON.stringify(newServer.value)
+    const JsonServerConfig = newServer.value
+    console.log('Adding server:', JsonServerConfig)
+    const headers = {
+      'Content-Type': 'application/json',
+    }
     if (newServer.value.type === 'database') {
-      const response = await axios.post(apiUrl + '/haproxy/add_db_server', {
-        JsonServerConfig,
+      const response = await axios.post(apiUrl + '/haproxy/add_db_server', JsonServerConfig, {
+        headers,
       })
       console.log('Server added:', response.data)
     } else if (newServer.value.type === 'application') {
-      const response = await axios.post(apiUrl + '/haproxy/add_app_server', {
-        JsonServerConfig,
+      const response = await axios.post(apiUrl + '/haproxy/add_app_server', JsonServerConfig, {
+        headers,
       })
       console.log('Server added:', response.data)
     }
+
     newServer.value = { name: '', address: '', port: '', type: '' }
     showSuccessToast.value = true
     setTimeout(() => {
