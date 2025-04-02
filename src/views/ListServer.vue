@@ -54,6 +54,15 @@
                   <span class="px-3 py-1 text-sm text-blue-700 rounded-full bg-blue-50"
                     >Port {{ server.port }}</span
                   >
+                  <button
+                    @click="removeServer(server.name)"
+                    class="p-2 text-red-600 transition-colors duration-200 rounded-full hover:bg-red-50"
+                    title="Supprimer le serveur"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>
@@ -128,6 +137,15 @@
                   <span class="px-3 py-1 text-sm rounded-full text-emerald-700 bg-emerald-50"
                     >Port {{ server.port }}</span
                   >
+                  <button
+                    @click="removeServer(server.name)"
+                    class="p-2 text-red-600 transition-colors duration-200 rounded-full hover:bg-red-50"
+                    title="Supprimer le serveur"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>
@@ -135,18 +153,39 @@
         </div>
       </div>
     </div>
+
+    <Toast
+      :show="showSuccessToast"
+      type="success"
+      title="Serveur supprimé avec succès"
+      message="Le serveur a été retiré de la configuration HAProxy."
+      @close="showSuccessToast = false"
+    />
+    <Toast
+      :show="showErrorToast"
+      type="error"
+      title="Erreur lors de la suppression"
+      message="Une erreur est survenue lors de la suppression du serveur."
+      @close="showErrorToast = false"
+    />
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import Toast from '../components/Toast.vue'
 const apiUrl = import.meta.env.VITE_API_URL
 
 export default {
+  components: {
+    Toast
+  },
   data() {
     return {
       applicationServers: [],
       databaseServers: [],
+      showSuccessToast: false,
+      showErrorToast: false
     }
   },
   methods: {
@@ -163,9 +202,27 @@ export default {
     getStatusColor(server) {
       return server.name.includes('') ? 'bg-green-500' : 'bg-yellow-500'
     },
+    async removeServer(serverName) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer ce serveur ?')) {
+        try {
+          await axios.delete(`${apiUrl}/haproxy/remove_server/${serverName}`)
+          this.showSuccessToast = true
+          setTimeout(() => {
+            this.showSuccessToast = false
+          }, 5000)
+          await this.fetchServers()
+        } catch (error) {
+          console.error('Error removing server:', error)
+          this.showErrorToast = true
+          setTimeout(() => {
+            this.showErrorToast = false
+          }, 5000)
+        }
+      }
+    }
   },
   created() {
     this.fetchServers()
-  },
+  }
 }
 </script>
